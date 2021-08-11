@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System;
-using Microsoft.AspNetCore.Session;
+using Kahbazi.AspNetCore.Session;
 using Microsoft.Extensions.Options;
 
 namespace Microsoft.AspNetCore.Builder
@@ -31,9 +31,9 @@ namespace Microsoft.AspNetCore.Builder
         /// Adds the <see cref="SessionMiddleware"/> to automatically enable session state for the application.
         /// </summary>
         /// <param name="app">The <see cref="IApplicationBuilder"/>.</param>
-        /// <param name="options">The <see cref="SessionOptions"/>.</param>
+        /// <param name="options">The <see cref="AddEndpointAwareSessionOptions"/>.</param>
         /// <returns>The <see cref="IApplicationBuilder"/>.</returns>
-        public static IApplicationBuilder UseSession(this IApplicationBuilder app, SessionOptions options)
+        public static IApplicationBuilder UseSession(this IApplicationBuilder app, AddEndpointAwareSessionOptions options)
         {
             if (app == null)
             {

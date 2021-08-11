@@ -4,7 +4,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 
-namespace Microsoft.AspNetCore.Session
+namespace Kahbazi.AspNetCore.Session
 {
     /// <inheritdoc />
     public class SessionFeature : ISessionFeature

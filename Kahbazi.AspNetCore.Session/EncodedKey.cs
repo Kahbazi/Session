@@ -3,7 +3,7 @@
 
 using System.Text;
 
-namespace Microsoft.AspNetCore.Session
+namespace Kahbazi.AspNetCore.Session
 {
     // Keys are stored in their utf-8 encoded state.
     // This saves us from de-serializing and re-serializing every key on every request.

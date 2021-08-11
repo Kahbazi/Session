@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 
-namespace Microsoft.AspNetCore.Session
+namespace Kahbazi.AspNetCore.Session
 {
     /// <summary>
     /// An <see cref="ISession"/> backed by an <see cref="IDistributedCache"/>.
@@ -165,8 +165,7 @@ namespace Microsoft.AspNetCore.Session
                 var encodedKey = new EncodedKey(key);
                 if (encodedKey.KeyBytes.Length > KeyLengthLimit)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(key),
-                        Resources.FormatException_KeyLengthIsExceeded(KeyLengthLimit));
+                    throw new ArgumentOutOfRangeException(nameof(key));
                 }
 
                 if (!_tryEstablishSession())

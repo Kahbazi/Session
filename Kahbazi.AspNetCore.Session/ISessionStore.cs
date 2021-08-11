@@ -4,7 +4,7 @@
 using System;
 using Microsoft.AspNetCore.Http;
 
-namespace Microsoft.AspNetCore.Session
+namespace Kahbazi.AspNetCore.Session
 {
     /// <summary>
     /// Storage for sessions that maintain user data while the user browses a web application.

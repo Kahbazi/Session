@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 
-namespace Microsoft.AspNetCore.Session
+namespace Kahbazi.AspNetCore.Session
 {
     /// <summary>
     /// Enables the session state for the application.
@@ -23,7 +23,7 @@ namespace Microsoft.AspNetCore.Session
         private const int SessionKeyLength = 36; // "382c74c3-721d-4f34-80e5-57657b6cbc27"
         private static readonly Func<bool> ReturnTrue = () => true;
         private readonly RequestDelegate _next;
-        private readonly SessionOptions _options;
+        private readonly AddEndpointAwareSessionOptions _options;
         private readonly ILogger _logger;
         private readonly ISessionStore _sessionStore;
         private readonly IDataProtector _dataProtector;
@@ -41,7 +41,7 @@ namespace Microsoft.AspNetCore.Session
             ILoggerFactory loggerFactory,
             IDataProtectionProvider dataProtectionProvider,
             ISessionStore sessionStore,
-            IOptions<SessionOptions> options)
+            IOptions<AddEndpointAwareSessionOptions> options)
         {
             if (next == null)
             {
@@ -132,10 +132,10 @@ namespace Microsoft.AspNetCore.Session
         {
             private readonly HttpContext _context;
             private readonly string _cookieValue;
-            private readonly SessionOptions _options;
+            private readonly AddEndpointAwareSessionOptions _options;
             private bool _shouldEstablishSession;
 
-            public SessionEstablisher(HttpContext context, string cookieValue, SessionOptions options)
+            public SessionEstablisher(HttpContext context, string cookieValue, AddEndpointAwareSessionOptions options)
             {
                 _context = context;
                 _cookieValue = cookieValue;
@@ -161,9 +161,9 @@ namespace Microsoft.AspNetCore.Session
                 response.Cookies.Append(_options.Cookie.Name!, _cookieValue, cookieOptions);
 
                 var responseHeaders = response.Headers;
-                responseHeaders.CacheControl = "no-cache,no-store";
-                responseHeaders.Pragma = "no-cache";
-                responseHeaders.Expires = "-1";
+                responseHeaders[HeaderNames.CacheControl] = "no-cache,no-store";
+                responseHeaders[HeaderNames.Pragma] = "no-cache";
+                responseHeaders[HeaderNames.Expires] = "-1";
             }
 
             // Returns true if the session has already been established, or if it still can be because the response has not been sent.

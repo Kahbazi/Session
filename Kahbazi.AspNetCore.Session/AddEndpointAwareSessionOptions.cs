@@ -4,14 +4,14 @@
 using System;
 using System.Threading;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Session;
+using Kahbazi.AspNetCore.Session;
 
 namespace Microsoft.AspNetCore.Builder
 {
     /// <summary>
     /// Represents the session state options for the application.
     /// </summary>
-    public class SessionOptions
+    public class AddEndpointAwareSessionOptions
     {
         private CookieBuilder _cookieBuilder = new SessionCookieBuilder();
 
@@ -59,7 +59,7 @@ namespace Microsoft.AspNetCore.Builder
             public override TimeSpan? Expiration
             {
                 get => null;
-                set => throw new InvalidOperationException(nameof(Expiration) + " cannot be set for the cookie defined by " + nameof(SessionOptions));
+                set => throw new InvalidOperationException(nameof(Expiration) + " cannot be set for the cookie defined by " + nameof(AddEndpointAwareSessionOptions));
             }
         }
     }

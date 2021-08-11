@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace Microsoft.AspNetCore.Session
+namespace Kahbazi.AspNetCore.Session
 {
     // A byte[] equality comparer based on the SipHash-2-4 algorithm. Key differences:
     // (a) we output 32-bit hashes instead of 64-bit hashes, and
