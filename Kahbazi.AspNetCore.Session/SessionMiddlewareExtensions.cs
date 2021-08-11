@@ -17,7 +17,7 @@ namespace Microsoft.AspNetCore.Builder
         /// </summary>
         /// <param name="app">The <see cref="IApplicationBuilder"/>.</param>
         /// <returns>The <see cref="IApplicationBuilder"/>.</returns>
-        public static IApplicationBuilder UseSession(this IApplicationBuilder app)
+        public static IApplicationBuilder UseEndpointAwareSession(this IApplicationBuilder app)
         {
             if (app == null)
             {
@@ -31,9 +31,9 @@ namespace Microsoft.AspNetCore.Builder
         /// Adds the <see cref="SessionMiddleware"/> to automatically enable session state for the application.
         /// </summary>
         /// <param name="app">The <see cref="IApplicationBuilder"/>.</param>
-        /// <param name="options">The <see cref="AddEndpointAwareSessionOptions"/>.</param>
+        /// <param name="options">The <see cref="EndpointAwareSessionOptions"/>.</param>
         /// <returns>The <see cref="IApplicationBuilder"/>.</returns>
-        public static IApplicationBuilder UseSession(this IApplicationBuilder app, AddEndpointAwareSessionOptions options)
+        public static IApplicationBuilder UseEndpointAwareSession(this IApplicationBuilder app, EndpointAwareSessionOptions options)
         {
             if (app == null)
             {

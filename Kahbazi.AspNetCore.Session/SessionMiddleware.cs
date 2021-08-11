@@ -23,7 +23,7 @@ namespace Kahbazi.AspNetCore.Session
         private const int SessionKeyLength = 36; // "382c74c3-721d-4f34-80e5-57657b6cbc27"
         private static readonly Func<bool> ReturnTrue = () => true;
         private readonly RequestDelegate _next;
-        private readonly AddEndpointAwareSessionOptions _options;
+        private readonly EndpointAwareSessionOptions _options;
         private readonly ILogger _logger;
         private readonly ISessionStore _sessionStore;
         private readonly IDataProtector _dataProtector;
@@ -41,7 +41,7 @@ namespace Kahbazi.AspNetCore.Session
             ILoggerFactory loggerFactory,
             IDataProtectionProvider dataProtectionProvider,
             ISessionStore sessionStore,
-            IOptions<AddEndpointAwareSessionOptions> options)
+            IOptions<EndpointAwareSessionOptions> options)
         {
             if (next == null)
             {
@@ -82,6 +82,16 @@ namespace Kahbazi.AspNetCore.Session
         /// <returns>A <see cref="Task"/> that completes when the middleware has completed processing.</returns>
         public async Task Invoke(HttpContext context)
         {
+            var endpoint = context.GetEndpoint();
+            var sessionState = endpoint?.Metadata.GetMetadata<ISessionStateMetadata>()?.State ?? _options.DefaultBehavior;
+
+            // Skip the middleware if session state is disabled
+            if (sessionState == SessionState.Disabled)
+            {
+                await _next(context);
+                return;
+            }
+
             var isNewSessionKey = false;
             Func<bool> tryEstablishSession = ReturnTrue;
             var cookieValue = context.Request.Cookies[_options.Cookie.Name!];
@@ -102,6 +112,16 @@ namespace Kahbazi.AspNetCore.Session
             feature.Session = _sessionStore.Create(sessionKey, _options.IdleTimeout, _options.IOTimeout, tryEstablishSession, isNewSessionKey);
             context.Features.Set<ISessionFeature>(feature);
 
+            if (sessionState == SessionState.ReadOnly)
+            {
+                feature.Session = new ReadonlySession(feature.Session);
+            }
+
+            if (sessionState == SessionState.EagerLoad || sessionState == SessionState.ReadOnly)
+            {
+                await feature.Session.LoadAsync();
+            }
+
             try
             {
                 await _next(context);
@@ -110,7 +130,7 @@ namespace Kahbazi.AspNetCore.Session
             {
                 context.Features.Set<ISessionFeature?>(null);
 
-                if (feature.Session != null)
+                if (feature.Session != null && sessionState != SessionState.ReadOnly)
                 {
                     try
                     {
@@ -132,10 +152,10 @@ namespace Kahbazi.AspNetCore.Session
         {
             private readonly HttpContext _context;
             private readonly string _cookieValue;
-            private readonly AddEndpointAwareSessionOptions _options;
+            private readonly EndpointAwareSessionOptions _options;
             private bool _shouldEstablishSession;
 
-            public SessionEstablisher(HttpContext context, string cookieValue, AddEndpointAwareSessionOptions options)
+            public SessionEstablisher(HttpContext context, string cookieValue, EndpointAwareSessionOptions options)
             {
                 _context = context;
                 _cookieValue = cookieValue;

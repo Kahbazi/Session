@@ -11,7 +11,7 @@ namespace Microsoft.AspNetCore.Builder
     /// <summary>
     /// Represents the session state options for the application.
     /// </summary>
-    public class AddEndpointAwareSessionOptions
+    public class EndpointAwareSessionOptions
     {
         private CookieBuilder _cookieBuilder = new SessionCookieBuilder();
 
@@ -43,6 +43,10 @@ namespace Microsoft.AspNetCore.Builder
         /// </summary>
         public TimeSpan IOTimeout { get; set; } = TimeSpan.FromMinutes(1);
 
+
+        public SessionState DefaultBehavior { get; set; } = SessionState.Default;
+
+
         private class SessionCookieBuilder : CookieBuilder
         {
             public SessionCookieBuilder()
@@ -59,7 +63,7 @@ namespace Microsoft.AspNetCore.Builder
             public override TimeSpan? Expiration
             {
                 get => null;
-                set => throw new InvalidOperationException(nameof(Expiration) + " cannot be set for the cookie defined by " + nameof(AddEndpointAwareSessionOptions));
+                set => throw new InvalidOperationException(nameof(Expiration) + " cannot be set for the cookie defined by " + nameof(EndpointAwareSessionOptions));
             }
         }
     }
